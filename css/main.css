@@ -101,9 +101,16 @@ blockquote {
 }
 
 .nav-logo img {
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
   display: block;
   max-height: 40px;
   width: auto;
+}
+
+.nav-link-title {
+  float: left;
+  padding-left: 15px;
 }
 
 .nav-links {
