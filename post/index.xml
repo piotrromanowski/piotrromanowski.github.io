@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on piotr.codes</title>
+    <link>https://piotrromanowski.github.io/post/</link>
+    <description>Recent content in Posts on piotr.codes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 17 Feb 2018 16:22:41 -0400</lastBuildDate>
+    
+	<atom:link href="https://piotrromanowski.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>React unit testing</title>
+      <link>https://piotrromanowski.github.io/post/react_testing/</link>
+      <pubDate>Sat, 17 Feb 2018 16:22:41 -0400</pubDate>
+      
+      <guid>https://piotrromanowski.github.io/post/react_testing/</guid>
+      <description>Testing, A topic that doesn&amp;rsquo;t have nearly as many tutorials, videos, and blog posts as it should have. Specifically, how to unit test components in React.
+First, let&amp;rsquo;s look at how Wikipedia defines &amp;ldquo;unit testing&amp;rdquo;.
+ In computer programming, unit testing is a software testing method by which individual units of source code, sets of one or more computer program modules together with associated control data, usage procedures, and operating procedures, are tested to determine whether they are fit for use.</description>
+    </item>
+    
+    <item>
+      <title>First Post</title>
+      <link>https://piotrromanowski.github.io/post/first_post/</link>
+      <pubDate>Sat, 10 Feb 2018 15:51:38 -0400</pubDate>
+      
+      <guid>https://piotrromanowski.github.io/post/first_post/</guid>
+      <description>New Redesign! Yes, you read that correctly, but hopefully for the last time. I&amp;rsquo;ve decided to move my website to hugo so that blogging is less tedious.
+The history of this website&amp;hellip;.
+I started with the original website back sometime in 2013 when I started my first software engineering job. Back then, the website was hosted on digital ocean as a Play! app. My original intentions for maintaining a website was to continue learning about whatever framework I was currently using, and to learn how to host a website.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.37.1" />
+
+
+<title>React unit testing - piotr.codes</title>
+<meta property="og:title" content="React unit testing - piotr.codes">
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://piotrromanowski.github.io/css/main.css" media="all">
+<link rel="stylesheet" href="https://piotrromanowski.github.io/css/fonts.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="https://piotrromanowski.github.io/" class="nav-logo">
+    <img src="https://piotrromanowski.github.io/images/me-circle.png"
+         width=""
+         height=""
+         alt="">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/page/about">About</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+  <article class="article">
+    <h1 class="article-title">React unit testing</h1>
+    
+    <span class="article-date">2018-02-17</span>
+    
+
+    <div class="article-content">
+      
+
+<p>Testing, A topic that doesn&rsquo;t have nearly as many tutorials, videos, and blog
+posts as it should have. Specifically, how to unit test components in React.</p>
+
+<p>First, let&rsquo;s look at how Wikipedia defines &ldquo;unit testing&rdquo;.</p>
+
+<blockquote>
+<p>In computer programming, unit testing is a software testing method by which
+individual units of source code, sets of one or more computer program modules
+together with associated control data, usage procedures, and operating
+procedures, are tested to determine whether they are fit for use.</p>
+</blockquote>
+
+<p>Now, let&rsquo;s take a look at what enzyme&rsquo;s docs have to say about shallow rendering</p>
+
+<blockquote>
+<p>Shallow rendering is useful to constrain yourself to testing a component as a
+unit, and to ensure that your tests aren&rsquo;t indirectly asserting on behavior
+of child components.</p>
+</blockquote>
+
+<p>That being said, it&rsquo;s safe to say that enzymes shallow rendering is what you
+should use when you&rsquo;re trying to enforce testing as a &ldquo;unit&rdquo;.</p>
+
+<p>Shallow rendering constrains users to only allow developers to make assertions
+on the components props, and immediate children of the component. Note that I
+didn&rsquo;t include &ldquo;state&rdquo; because we should try to avoid making assertions on
+the implementation details of the component. Also, shallow rendering will also
+help improve the performance of your tests since you don&rsquo;t require all the
+extra DOM setup.</p>
+
+<p>Okay, I could continue writing about unit testing react components, or, I could
+bring in an example. Let&rsquo;s take a look at the below EnhancedButton component.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... other imports ...
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> {<span style="color:#a6e22e">Button</span>} <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./Button&#39;</span>
+<span style="color:#66d9ef">import</span> {Error} <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./Error&#39;</span>
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">EnhancedButtonProps</span> {
+  <span style="color:#a6e22e">errorText</span><span style="color:#f92672">?:</span> <span style="color:#a6e22e">string</span>
+  <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#66d9ef">void</span>
+}
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">State</span> {
+  <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">number</span>
+  <span style="color:#a6e22e">touched</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">boolean</span>
+}
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">EnhancedButton</span>
+    <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">Component</span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">EnhancedButtonProps</span>, <span style="color:#a6e22e">State</span><span style="color:#f92672">&gt;</span> {
+
+  <span style="color:#a6e22e">constructor</span>(<span style="color:#a6e22e">props</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">EnhancedButtonProps</span>) {
+    <span style="color:#66d9ef">super</span>(<span style="color:#a6e22e">props</span>)
+
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span> {
+      <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+      <span style="color:#a6e22e">touched</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+    }
+  }
+
+  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">onClick</span> <span style="color:#f92672">=</span> () =&gt; {
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setState</span>({<span style="color:#a6e22e">touched</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">count</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>})
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">onClick</span>()
+  }
+
+  <span style="color:#a6e22e">render</span>() {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">error</span> <span style="color:#f92672">=</span> <span style="color:#f92672">!!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">errorText</span>
+      <span style="color:#f92672">?</span> <span style="color:#f92672">&lt;</span>Error<span style="color:#f92672">&gt;</span>{<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">errorText</span>}<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/Error&gt;</span>
+      <span style="color:#f92672">:</span> <span style="color:#66d9ef">undefined</span>
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">touched</span>
+      <span style="color:#f92672">?</span> (<span style="color:#e6db74">&#39;Clicked &#39;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">count</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; time(s)!&#39;</span>)
+      <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Click Me&#39;</span>
+    <span style="color:#66d9ef">return</span> (
+      <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">span</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">Button</span>
+          <span style="color:#a6e22e">errored</span><span style="color:#f92672">=</span>{<span style="color:#f92672">!!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">errorText</span>}
+          <span style="color:#a6e22e">onClick</span><span style="color:#f92672">=</span>{<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">onClick</span>}
+        <span style="color:#f92672">&gt;</span>
+          {<span style="color:#a6e22e">name</span>}
+        <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/Button&gt;</span>
+        {<span style="color:#a6e22e">error</span>}
+      <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/span&gt;</span>
+    )
+  }
+}
+</code></pre></div>
+
+<p>Now after looking at that component, let&rsquo;s think about what&rsquo;s important to test,
+and/or what promises this components makes with it&rsquo;s consumers.</p>
+
+<p>To keep things brief, I&rsquo;ll write these out as a list</p>
+
+<h3 id="without-errortext">Without errorText</h3>
+
+<ul>
+<li>We can say that we expect this component to render a mysterious &ldquo;Button&rdquo;
+component with a particular set of props. We don&rsquo;t care what that &ldquo;Button&rdquo; does
+with the props, we just want them to be proxied through.</li>
+<li>We expect that it does not initially render an Error component</li>
+<li>When the mysterious &ldquo;Button&rdquo; is clicked, we expect the onClick prop to be
+invoked and to change the children of the component</li>
+</ul>
+
+<h3 id="with-errortext">With errorText</h3>
+
+<ul>
+<li>We expect that it renders an Error component</li>
+</ul>
+
+<p>Let&rsquo;s take a look at what these expectations look like in code:</p>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;EnhancedButton&#39;</span>, () =&gt; {
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">props</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Readonly</span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">EnhancedButtonProps</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">ShallowWrapper</span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">any</span>, <span style="color:#a6e22e">any</span><span style="color:#f92672">&gt;</span>
+
+  <span style="color:#a6e22e">beforeEach</span>(() =&gt; {
+    <span style="color:#a6e22e">props</span> <span style="color:#f92672">=</span> {
+      <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">spy</span>(),
+    }
+  })
+
+  <span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#39;when rendered without errorText&#39;</span>, () =&gt; {
+
+    <span style="color:#a6e22e">beforeEach</span>(() =&gt; {
+      <span style="color:#a6e22e">component</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">shallow</span>(<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">EnhancedButton</span> {...<span style="color:#a6e22e">props</span>} <span style="color:#960050;background-color:#1e0010">/&gt;)</span>
+    })
+
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should render a Button&#39;</span>, () =&gt; {
+      <span style="color:#75715e">// Notice that I&#39;m not digging into the components
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// implementation and only asserting that props
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// are properly being passed through to it
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(<span style="color:#a6e22e">Button</span>).<span style="color:#a6e22e">props</span>().<span style="color:#a6e22e">children</span>)
+        .<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#e6db74">&#39;Click Me&#39;</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(<span style="color:#a6e22e">Button</span>).<span style="color:#a6e22e">props</span>().<span style="color:#a6e22e">errored</span>).<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">be</span>.<span style="color:#66d9ef">false</span>
+    })
+
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should not render error div&#39;</span>, () =&gt; {
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(Error)).<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">have</span>.<span style="color:#a6e22e">length</span>(<span style="color:#ae81ff">0</span>)
+    })
+
+    <span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#39;and the Button is clicked&#39;</span>, () =&gt; {
+
+      <span style="color:#a6e22e">beforeEach</span>(() =&gt; {
+        <span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(<span style="color:#a6e22e">Button</span>).<span style="color:#a6e22e">simulate</span>(<span style="color:#e6db74">&#39;click&#39;</span>)
+      })
+
+      <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should invoke onClick prop&#39;</span>, () =&gt; {
+        <span style="color:#75715e">// Continued testing that the onClick handler
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// is being passed through to the Button
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">expect</span>((<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">onClick</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">SinonSpy</span>).<span style="color:#a6e22e">callCount</span>).<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#ae81ff">1</span>)
+      })
+
+      <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should render with clicked count&#39;</span>, () =&gt; {
+        <span style="color:#75715e">// We don&#39;t care how the Button renders the children,
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// we just want to make sure that it&#39;s receiving them.
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Also notice that we&#39;re implicitly testing that the
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// state of our EnhancedButton is being updated properly.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(<span style="color:#a6e22e">Button</span>).<span style="color:#a6e22e">props</span>().<span style="color:#a6e22e">children</span>)
+          .<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#e6db74">&#39;Clicked 1 time(s)!&#39;</span>)
+      })
+    })
+  })
+
+  <span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#39;when rendered with errorText&#39;</span>, () =&gt; {
+
+    <span style="color:#a6e22e">beforeEach</span>(() =&gt; {
+      <span style="color:#a6e22e">props</span> <span style="color:#f92672">=</span> {...<span style="color:#a6e22e">props</span>, <span style="color:#a6e22e">errorText</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Something went wrong&#39;</span>}
+      <span style="color:#a6e22e">component</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">shallow</span>(<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">EnhancedButton</span> {...<span style="color:#a6e22e">props</span>} <span style="color:#960050;background-color:#1e0010">/&gt;)</span>
+    })
+
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should not render error div&#39;</span>, () =&gt; {
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(Error)).<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">have</span>.<span style="color:#a6e22e">length</span>(<span style="color:#ae81ff">1</span>)
+      <span style="color:#75715e">// Again, we aren&#39;t concerned with the implementation of
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// the `Error` component, just that it&#39;s passed the
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// correct props.
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">find</span>(Error).<span style="color:#a6e22e">props</span>().<span style="color:#a6e22e">children</span>)
+        .<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">errorText</span>)
+    })
+  })
+})
+</code></pre></div></p>
+
+    </div>
+ 
+    <ul class="article-taxonomy">
+      
+    
+      
+  </article>
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://piotrromanowski.github.io/index.xml" type="application/rss+xml" target="_blank"><i class="fa fa-rss"></i> RSS feed</a>
+          </li>
+          <li>
+            <a href="https://github.com/mobybit/hugo-natrium-theme"><i class="fa fa-github"></i> Code</a>
+          </li>
+          <li>
+            <a href="https://piotrromanowski.github.io/site-notice">Site notice</a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+
+  </body>
+</html>
+
