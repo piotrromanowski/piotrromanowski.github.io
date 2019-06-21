@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Photography - Piotr Romanowski</title>
+<meta property="og:title" content="Photography - Piotr Romanowski">
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://piotrromanowski.github.io/css/main.css" media="all">
+<link rel="stylesheet" href="https://piotrromanowski.github.io/css/fonts.css">
+<link rel="shortcut icon" type="image/png" href="https://piotrromanowski.github.io/images/favicon.png"/>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="https://piotrromanowski.github.io/" class="nav-logo">
+    <img src="https://piotrromanowski.github.io/images/me-circle.png"
+         width=""
+         height=""
+         alt="">
+  </a>
+
+  <ul class="nav-links">
+    <li class="nav-link-title">Piotr Romanowski</li>
+    
+    <li><a href="/page/photography">Photography</a></li>
+    
+    <li><a href="/page/about">About</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+  </ul>
+</nav>
+      </header>
+
+
+<main class="content" role="main">
+  <article class="article">
+    <h1 class="article-title">Photography</h1>
+    
+
+    <div class="article-content">
+      <p><h1>Denver</h1>
+<div class="grid-container">
+    <img id="a" class="a" src="https://piotrromanowski.github.io/images/denver-a.jpg">
+    <img id="b" class="b" src="https://piotrromanowski.github.io/images/denver-b.jpg">
+    <img id="c" class="c" src="https://piotrromanowski.github.io/images/denver-c.jpg">
+    <img id="d" class="d" src="https://piotrromanowski.github.io/images/denver-d.jpg">
+    <img id="e" class="e" src="https://piotrromanowski.github.io/images/denver-e.jpg">
+    <img id="f" class="f" src="https://piotrromanowski.github.io/images/denver-f.jpg">
+</div>
+<div class="grid-container">
+<div></p>
+
+<!-- The Modal -->
+
+<div id="myModal" class="modal">
+  <img class="modal-content" id="img01">
+</div>
+
+<script>
+  var modal = document.getElementById('myModal');
+
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+  images = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+  for (image of images) {
+    var img = document.getElementById(image);
+    var modalImg = document.getElementById("img01");
+    //var captionText = document.getElementById("caption");
+    img.onclick = function(){
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+        //captionText.innerHTML = this.alt;
+    }
+  }
+
+
+  // When the user clicks on <span> (x), close the modal
+  modal.onclick = function() {
+      img01.className += " out";
+      setTimeout(function() {
+        modal.style.display = "none";
+        img01.className = "modal-content";
+      }, 400);
+      
+  }
+</script>
+
+    </div>
+ 
+    <ul class="article-taxonomy">
+      
+    
+      
+  </article>
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://piotrromanowski.github.io/index.xml" type="application/rss+xml" target="_blank"><i class="fa fa-rss"></i> RSS feed</a>
+          </li>
+          <li>
+            <a href="https://github.com/mobybit/hugo-natrium-theme"><i class="fa fa-github"></i> Code</a>
+          </li>
+          <li>
+            <a href="https://piotrromanowski.github.io/site-notice">Site notice</a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+
+  </body>
+</html>
+

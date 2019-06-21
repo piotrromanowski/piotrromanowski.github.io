@@ -6,10 +6,20 @@
     <description>Recent content in Pages on Piotr Romanowski</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 21 Mar 2018 23:54:31 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 18 Jun 2019 18:56:07 -0400</lastBuildDate>
     
 	<atom:link href="https://piotrromanowski.github.io/page/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Photography</title>
+      <link>https://piotrromanowski.github.io/page/photography/</link>
+      <pubDate>Tue, 18 Jun 2019 18:56:07 -0400</pubDate>
+      
+      <guid>https://piotrromanowski.github.io/page/photography/</guid>
+      <description>Denver  
+  var modal = document.getElementById(&#39;myModal&#39;); // Get the image and insert it inside the modal - use its &#34;alt&#34; text as a caption images = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;]; for (image of images) { var img = document.getElementById(image); var modalImg = document.getElementById(&#34;img01&#34;); //var captionText = document.getElementById(&#34;caption&#34;); img.onclick = function(){ modal.style.display = &#34;block&#34;; modalImg.src = this.src; modalImg.alt = this.alt; //captionText.innerHTML = this.alt; } } // When the user clicks on  (x), close the modal modal.</description>
+    </item>
     
     <item>
       <title>About</title>

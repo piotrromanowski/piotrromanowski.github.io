@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.37.1" />
+<meta name="generator" content="Hugo 0.55.6" />
 
 
 <title>React unit testing - Piotr Romanowski</title>
@@ -37,13 +37,14 @@
   <ul class="nav-links">
     <li class="nav-link-title">Piotr Romanowski</li>
     
+    <li><a href="/page/photography">Photography</a></li>
+    
     <li><a href="/page/about">About</a></li>
     
     <li><a href="/">Home</a></li>
     
   </ul>
 </nav>
-
       </header>
 
 
@@ -164,7 +165,7 @@ invoked and to change the children of the component</li>
 
 <p>Here&rsquo;s what these expectations would look like in code:</p>
 
-<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;EnhancedButton&#39;</span>, () =&gt; {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;EnhancedButton&#39;</span>, () =&gt; {
   <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">props</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Readonly</span>&lt;<span style="color:#f92672">EnhancedButtonProps</span>&gt;
   <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">ShallowWrapper</span>&lt;<span style="color:#f92672">any</span><span style="color:#960050;background-color:#1e0010">,</span> <span style="color:#a6e22e">any</span>&gt;
 
@@ -232,7 +233,7 @@ invoked and to change the children of the component</li>
         .<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">errorText</span>)
     })
   })
-})</code></pre></div></p>
+})</code></pre></div>
 
 <p>And that&rsquo;s how I test 90% of my components! Of course, there are more complicated
 scenarios when you&rsquo;re dealing with larger nesting, HOCs, or third party libraries,
