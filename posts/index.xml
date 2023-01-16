@@ -13,8 +13,8 @@
       <pubDate>Sun, 15 Jan 2023 17:39:56 -0500</pubDate>
       
       <guid>https://piotrromanowski.github.io/posts/thin_wrappers/</guid>
-      <description>Third party dependencies are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking api changes. In this blog post we will explain the benefits of writing thin wrappers for any dependencies you might use throughout your code base.
-Example third-party dep (loosely based on the AWS sdk)
+      <description>Third party dependencies are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking API changes. In this blog post we will explain the benefits of writing thin wrappers for dependencies you might use throughout your code base.
+Example third-party dependency (loosely based on the AWS sdk)
 type Client func New(o Options) *Client func (f *Client) ListServices(input *ListInput) *ListOutput You use the dependency like:</description>
     </item>
     

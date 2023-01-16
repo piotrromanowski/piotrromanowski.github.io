@@ -11,8 +11,8 @@
 
   
   
-  <meta name="description" content="Third party dependencies are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking api changes. In this blog post we will explain the benefits of writing thin wrappers for any dependencies you might use throughout your code base.
-Example third-party dep (loosely based on the AWS sdk)
+  <meta name="description" content="Third party dependencies are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking API changes. In this blog post we will explain the benefits of writing thin wrappers for dependencies you might use throughout your code base.
+Example third-party dependency (loosely based on the AWS sdk)
 type Client func New(o Options) *Client func (f *Client) ListServices(input *ListInput) *ListOutput You use the dependency like:" />
   <meta
     name="author"
@@ -111,11 +111,11 @@ type Client func New(o Options) *Client func (f *Client) ListServices(input *Lis
     _:where(ul,ol,blockquote){pl:1.5em}
     _:where(video,img){max-width:full}
     _:where(a,mark){text-underline-offset:3}
-"><p>Third party dependencies are introduced in any project you work on. You can even think of a standard library
-as a dependency which may have breaking api changes. In this blog post we will
-explain the benefits of writing thin wrappers for any dependencies you might use throughout
-your code base.</p>
-<p>Example third-party dep (loosely based on the AWS sdk)</p>
+"><p>Third party dependencies are introduced in any project you work on. You can even
+think of a standard library as a dependency which may have breaking API changes.
+In this blog post we will explain the benefits of writing thin wrappers for
+dependencies you might use throughout your code base.</p>
+<p>Example third-party dependency (loosely based on the AWS sdk)</p>
 <div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#fe8019">type</span> Client
 </span></span><span style="display:flex;"><span>    <span style="color:#fe8019">func</span> <span style="color:#fabd2f">New</span>(o Options) <span style="color:#fe8019">*</span>Client
 </span></span><span style="display:flex;"><span>    <span style="color:#fe8019">func</span> (f <span style="color:#fe8019">*</span>Client) <span style="color:#fabd2f">ListServices</span>(input <span style="color:#fe8019">*</span>ListInput) <span style="color:#fe8019">*</span>ListOutput
@@ -125,25 +125,23 @@ your code base.</p>
 </span></span><span style="display:flex;"><span>        name: <span style="color:#b8bb26">&#34;foo&#34;</span>,
 </span></span><span style="display:flex;"><span>    })
 </span></span></code></pre></div><p>At first glance you might ask why you would even bother writing a wrapper
-for a client that doesn&rsquo;t require much code to begin with. You might even think that
-given it&rsquo;s simply api, you wouldn&rsquo;t mind writing this out in several places of a
-project that you needed to use it.</p>
-<p>Now imagine your project starts rapdily growing and you begin using this client
-in many more places. You also want to use another feature of this sdk, but you realize
-that it is only supported in the latest version of the library. So you do as
-any person would and update your dep/lock file to update the library to it&rsquo;s
-latest version. You begin to run tests to confirm you haven&rsquo;t broken anything, and
-immediately you&rsquo;re treated with errors about the <code>ListServices</code> function now
-accepting a different type of parameter called <code>ListInputs</code> rather than the
-previous <code>ListInput</code>.</p>
-<p>You use a find/replace utility to replace all 30 occurences of said function.
-However this is only the start, you&rsquo;re also using several other functions that have
+for a client that doesn&rsquo;t require much code to begin with. Given it&rsquo;s simply API,
+you wouldn&rsquo;t mind writing this out in several places of a project.</p>
+<p>Now imagine your project starts rapidly growing and you begin using this client
+in many more places. You also want to use a new feature of this library, but
+that requires you to update to the latest version of the library.
+You make the appropriate changes to update the library to it&rsquo;s latest version. Upon
+running tests to catch breaking changes, you&rsquo;re treated with errors about the
+<code>ListServices</code> function now accepting a different type of parameter called <code>ListInputs</code>
+rather than the previous <code>ListInput</code>.</p>
+<p>You use a find/replace utility to replace all 30 occurrences of said function.
+However this is only the start. You&rsquo;re also using several other functions that have
 had similar changes and some require additional inputs that can&rsquo;t be mass inserted
 very easily. These types of changes begin to build up a large pull request that will
 require the reviewers to look over dozens of files.</p>
-<p>This burden is lessened if you write a small wrapper around this sdk that you then use
-throughout your project.
-This wrapper could look something like:</p>
+<p>This burden is lessened if you write a small wrapper around this library that you
+then use throughout your project.</p>
+<p>This wrapper could look something like:</p>
 <div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#928374;font-style:italic">// in your own repo, under //third-party/foo
 </span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
 </span></span><span style="display:flex;"><span>    <span style="color:#fe8019">type</span> Client <span style="color:#fe8019">struct</span>{
@@ -159,22 +157,30 @@ This wrapper could look something like:</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#fe8019">func</span> (f Client) <span style="color:#fabd2f">ListServices</span>(name <span style="color:#fabd2f">string</span>) ListOutput {
 </span></span><span style="display:flex;"><span>        <span style="color:#fe8019">return</span> f.lib.<span style="color:#fabd2f">ListServices</span>(<span style="color:#fe8019">&amp;</span>foolib.ListInput{name: name})
 </span></span><span style="display:flex;"><span>    }
-</span></span></code></pre></div><p>Here, you&rsquo;re minimizing the interface of the <code>New</code> and <code>ListServices</code> functions
-from the start, reducing the api knowledge a developer of your project is required
-to posess in order to begin using it. Secondly, when that dependency is now updated,
-you only need to update it&rsquo;s usage in one place:</p>
+</span></span></code></pre></div><p>By creating this wrapper, you are doing several things for consumers of the
+library:</p>
+<ol>
+<li>You&rsquo;re minimizing the interface of the constructor and instance functions. This
+will make it easier to onboard new developers to this library who now no longer
+need to reference the original libraries API docs.</li>
+<li>You can alter the interface to follow a pattern you and other developers
+are already using everywhere else.</li>
+<li>You are narrowing the import and usage of the library to only this wrapper. Rather
+than updating the dependency in all 30+ locations that it&rsquo;s used, you only need to
+update your wrapper like:</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>    func (f Client) ListServices(name string) ListOutput {
 </span></span><span style="display:flex;"><span><span style="color:#f92672">-        return f.lib.ListServices(&amp;ListInput{name: name})
 </span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+        return f.lib.ListServices(name)
-</span></span></span></code></pre></div><p>And your pull pull request that once required dozens of files change would not only require
+</span></span></span></code></pre></div><p>And now your pull request that once required dozens of file changes, only requires
 a single file to be changed.</p>
 <p>These thin wrappers also help a lot when libraries are deprecated and superseded with
 entirely different libraries. Those initial find/replace commands wouldn&rsquo;t work here
-because now you might be working with a completely different api that uses a different
-<a href="https://en.wikipedia.org/wiki/Creational_pattern">creational pattern</a>, and/or requires
-several new imports.
-Meanwhile our simple wrapper would continue to be updated in a single place, and the consumers
-of your wrapper are untouched because our wrappers interface didn&rsquo;t need to change.</p>
+because now you might be working with a completely different API that uses a different
+<a href="https://en.wikipedia.org/wiki/Creational_pattern">creational patterns</a>, and/or requires
+several new imports. Meanwhile our simple wrapper would continue to be updated in a
+single place, and the consumers of your wrapper are untouched because our wrappers
+interface didn&rsquo;t need to change.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>imports (
 </span></span><span style="display:flex;"><span><span style="color:#f92672">-  &#34;github.com/fooCompany/fooLib&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+  &#34;github.com/buzzCompany/buzzLib&#34;
@@ -186,7 +192,17 @@ of your wrapper are untouched because our wrappers interface didn&rsquo;t need t
 </span></span><span style="display:flex;"><span><span style="color:#f92672">-         lib: fooLib.New(&amp;fooLib.Options{apiKey: apiKey})
 </span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+         lib: buzzLib.New(&amp;types.Options{environment: &#34;default&#34;, apiKey: apiKey}
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>      }
-</span></span></code></pre></div></div></article>
+</span></span></code></pre></div><p>Writing these wrappers isn&rsquo;t always necessary and can also be overused. You&rsquo;ll
+want to carefully chose when a library would benefit from a thin wrapper like this.
+A couple questions that you can ask yourself before committing to a wrapper include:</p>
+<ol>
+<li>Is the library going to be heavily used within the project?</li>
+<li>Is the library relatively new and often undergo rewrites?</li>
+<li>Is the library an abstraction for constantly evolving lower level technology?</li>
+<li>Does the library introduce breaking API changes frequently?</li>
+<li>Does the library have superfluous options, most of which you don&rsquo;t expect to use?</li>
+</ol>
+</div></article>
 <footer class="py:24">
     <div class="f:fade-30 f:14 mb:8"></div>
     <div class="f:fade-60 f:12">Theme <a class="f:bold" href="https://github.com/serkodev/holy" _target="_blank">Holy</a></div>
