@@ -1,0 +1,4 @@
+baseURL = "https://piotrromanowski.github.io/"
+languageCode = 'en-us'
+title = 'Piotr'
+theme = 'holy'
