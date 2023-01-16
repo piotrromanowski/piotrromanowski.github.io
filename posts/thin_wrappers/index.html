@@ -11,7 +11,7 @@
 
   
   
-  <meta name="description" content="Third party deps are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking api changes. In this blog post we will explain the benefits of writing thin wrappers for any dependencies you might use throughout your code base.
+  <meta name="description" content="Third party dependencies are introduced in any project you work on. You can even think of a standard library as a dependency which may have breaking api changes. In this blog post we will explain the benefits of writing thin wrappers for any dependencies you might use throughout your code base.
 Example third-party dep (loosely based on the AWS sdk)
 type Client func New(o Options) *Client func (f *Client) ListServices(input *ListInput) *ListOutput You use the dependency like:" />
   <meta
@@ -100,7 +100,7 @@ type Client func New(o Options) *Client func (f *Client) ListServices(input *Lis
     _:where(ul,ol,blockquote){pl:1.5em}
     _:where(video,img){max-width:full}
     _:where(a,mark){text-underline-offset:3}
-"><p>Third party deps are introduced in any project you work on. You can even think of a standard library
+"><p>Third party dependencies are introduced in any project you work on. You can even think of a standard library
 as a dependency which may have breaking api changes. In this blog post we will
 explain the benefits of writing thin wrappers for any dependencies you might use throughout
 your code base.</p>
@@ -160,7 +160,7 @@ a single file to be changed.</p>
 <p>These thin wrappers also help a lot when libraries are deprecated and superseded with
 entirely different libraries. Those initial find/replace commands wouldn&rsquo;t work here
 because now you might be working with a completely different api that uses a different
-creational pattern[https://en.wikipedia.org/wiki/Creational_pattern], and/or requires
+<a href="https://en.wikipedia.org/wiki/Creational_pattern">creational pattern</a>, and/or requires
 several new imports.
 Meanwhile our simple wrapper would continue to be updated in a single place, and the consumers
 of your wrapper are untouched because our wrappers interface didn&rsquo;t need to change.</p>
