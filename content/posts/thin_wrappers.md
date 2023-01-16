@@ -4,7 +4,7 @@ date: 2023-01-15T17:39:56-05:00
 draft: false
 ---
 
-Third party deps are introduced in any project you work on. You can even think of a standard library
+Third party dependencies are introduced in any project you work on. You can even think of a standard library
 as a dependency which may have breaking api changes. In this blog post we will
 explain the benefits of writing thin wrappers for any dependencies you might use throughout
 your code base.
@@ -85,7 +85,7 @@ a single file to be changed.
 These thin wrappers also help a lot when libraries are deprecated and superseded with
 entirely different libraries. Those initial find/replace commands wouldn't work here
 because now you might be working with a completely different api that uses a different
-creational pattern[https://en.wikipedia.org/wiki/Creational_pattern], and/or requires
+[creational pattern](https://en.wikipedia.org/wiki/Creational_pattern), and/or requires
 several new imports.
 Meanwhile our simple wrapper would continue to be updated in a single place, and the consumers
 of your wrapper are untouched because our wrappers interface didn't need to change.
